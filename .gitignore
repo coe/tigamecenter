@@ -2,3 +2,7 @@ tmp
 bin
 build
 *.zip
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcworkspace/contents.xcworkspacedata
+.DS_Store
