@@ -107,27 +107,39 @@
 
 - (void)authenticateLocalPlayer:(id)args
 {
-    ENSURE_UI_THREAD_1_ARG(args);
-    ENSURE_SINGLE_ARG(args,NSDictionary);
-    KrollCallback* onSuccess = [args objectForKey:@"callback"];
-    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
-    [localPlayer authenticateWithCompletionHandler:^(NSError *error) {
-        if (localPlayer.isAuthenticated)
+//    ENSURE_UI_THREAD_1_ARG(args);
+//    ENSURE_SINGLE_ARG(args,NSDictionary);
+//    KrollCallback* onSuccess = [args objectForKey:@"callback"];
+//    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
+//    [localPlayer authenticateWithCompletionHandler:^(NSError *error) {
+//        if (localPlayer.isAuthenticated)
+//        {
+//            // 認証済みプレーヤーの追加タスクを実行する
+//            //success
+//            
+//            NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:NUMBOOL(YES),@"auth",nil];
+//            
+//            [self _fireEventToListener:@"auth" withObject:event listener:onSuccess thisObject:nil];
+//        }
+//        else {
+//            NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:NUMBOOL(NO),@"auth",nil];
+//            
+//            [self _fireEventToListener:@"auth" withObject:event listener:onSuccess thisObject:nil];
+//        }
+//    }];
+    
+    GKLocalPlayer* player = [GKLocalPlayer localPlayer];
+    player.authenticateHandler = ^(UIViewController* ui, NSError* error )
+    {
+        if( nil != ui )
         {
-            // 認証済みプレーヤーの追加タスクを実行する
-            //success
-            
-            NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:NUMBOOL(YES),@"auth",nil];
-            
-            [self _fireEventToListener:@"auth" withObject:event listener:onSuccess thisObject:nil];
+            [[TiApp app] showModalController:ui animated:YES];
+            //[self presentViewController:ui animated:YES completion:nil];
         }
-        else {
-            NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys:NUMBOOL(NO),@"auth",nil];
-            
-            [self _fireEventToListener:@"auth" withObject:event listener:onSuccess thisObject:nil];
-        }
-    }];
+        
+    };
 }
+
 
 //- (void) reportAchievementIdentifier: (NSString*) identifier percentComplete: (float) percent 
 - (void) reportAchievementIdentifier:(id)args
