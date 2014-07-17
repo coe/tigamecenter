@@ -165,40 +165,52 @@
 {
     ENSURE_UI_THREAD_1_ARG(args);
     ENSURE_SINGLE_ARG(args,NSDictionary);
+    NSString* identifier = [args objectForKey:@"id"];
+    NSInteger scoreR = [[args objectForKey:@"score"] intValue];
+    
+    if ([GKLocalPlayer localPlayer].isAuthenticated) {
+        GKScore* score = [[GKScore alloc] initWithLeaderboardIdentifier:identifier];
+        score.value = scoreR;
+        [GKScore reportScores:@[score] withCompletionHandler:^(NSError *error) {
+            if (error) {
+                // エラーの場合
+            }
+        }];
+    }
     
     //IDがある場合、指定
-    NSString* identifier = [args objectForKey:@"id"];
-    if(identifier != nil) leaderboardController.category = identifier;
-    
-    GKScore *scoreReporter = [[GKScore alloc] initWithCategory:identifier];//@"jp.coe.yubitonton.score"];
-    NSInteger scoreR = [[args objectForKey:@"score"] intValue];
-
-    //scoreR=スコアの値;
-    scoreReporter.value = scoreR;
-    [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
-        if (error != nil)
-        {
-            // 報告エラーの処理
-            NSLog(@"error %@",error);
-        }
-    }];
-    
-//    GKScore *scoreReporter = [[[GKScore alloc] initWithCategory:category]
-//                              autorelease];
-//    scoreReporter.value = score_gc;
-    [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
-        if (error != nil)
-        {
-            // 報告エラーの処理
-//            UIAlertView *alert = [[UIAlertView alloc] init];
-//            alert.delegate = self;
-//            alert.title = @"スコアの送信に失敗しました";
-//            alert.message = @"もう一度送信しますか？";
-//            [alert addButtonWithTitle:@"はい"];
-//            [alert addButtonWithTitle:@"いいえ"];
-//            [alert show];
-        }
-    }];
+//    NSString* identifier = [args objectForKey:@"id"];
+//    if(identifier != nil) leaderboardController.category = identifier;
+//    
+//    GKScore *scoreReporter = [[GKScore alloc] initWithCategory:identifier];//@"jp.coe.yubitonton.score"];
+//    NSInteger scoreR = [[args objectForKey:@"score"] intValue];
+//
+//    //scoreR=スコアの値;
+//    scoreReporter.value = scoreR;
+//    [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
+//        if (error != nil)
+//        {
+//            // 報告エラーの処理
+//            NSLog(@"error %@",error);
+//        }
+//    }];
+//    
+////    GKScore *scoreReporter = [[[GKScore alloc] initWithCategory:category]
+////                              autorelease];
+////    scoreReporter.value = score_gc;
+//    [scoreReporter reportScoreWithCompletionHandler:^(NSError *error) {
+//        if (error != nil)
+//        {
+//            // 報告エラーの処理
+////            UIAlertView *alert = [[UIAlertView alloc] init];
+////            alert.delegate = self;
+////            alert.title = @"スコアの送信に失敗しました";
+////            alert.message = @"もう一度送信しますか？";
+////            [alert addButtonWithTitle:@"はい"];
+////            [alert addButtonWithTitle:@"いいえ"];
+////            [alert show];
+//        }
+//    }];
 }
 
 
