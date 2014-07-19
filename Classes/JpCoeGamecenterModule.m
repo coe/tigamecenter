@@ -151,9 +151,9 @@
     ENSURE_UI_THREAD_1_ARG(args);
     ENSURE_SINGLE_ARG(args,NSDictionary);
     if ([GKLocalPlayer localPlayer].isAuthenticated) {
-        NSString* identifier = [[args objectForKey:@"key"] string];
-        float percent = [[args objectForKey:@"percent"] floatValue];
+        NSString* identifier = [args objectForKey:@"id"];
         GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: identifier];
+        achievement.percentComplete = [[args objectForKey:@"percent"] floatValue];
         
         NSArray *achievementsToComplete = [NSArray
                                            arrayWithObjects:achievement, nil];
