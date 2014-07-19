@@ -2,7 +2,7 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 2.0
+version: 3.0.0
 apiversion: 2
 description: th
 author: th
@@ -15,4 +15,4 @@ name: gamecenter
 moduleid: jp.coe.gamecenter
 guid: f76be438-bdf0-440a-b7e2-c718424a2af9
 platform: iphone
-minsdk: 2.0.1.GA2
+minsdk: 3.2.3.GA

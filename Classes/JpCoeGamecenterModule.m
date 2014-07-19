@@ -107,6 +107,8 @@
 
 - (void)authenticateLocalPlayer:(id)args
 {
+    NSLog(@"%s%d start",__FUNCTION__,__LINE__);
+
 //    ENSURE_UI_THREAD_1_ARG(args);
 //    ENSURE_SINGLE_ARG(args,NSDictionary);
 //    KrollCallback* onSuccess = [args objectForKey:@"callback"];
@@ -144,25 +146,47 @@
 //- (void) reportAchievementIdentifier: (NSString*) identifier percentComplete: (float) percent 
 - (void) reportAchievementIdentifier:(id)args
 {
+    NSLog(@"%s%d start",__FUNCTION__,__LINE__);
+
     ENSURE_UI_THREAD_1_ARG(args);
     ENSURE_SINGLE_ARG(args,NSDictionary);
-    NSString* identifier = [[args objectForKey:@"key"] string];
-    float percent = [[args objectForKey:@"percent"] floatValue];
-    GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: identifier];
-    if (achievement) {
+    if ([GKLocalPlayer localPlayer].isAuthenticated) {
+        NSString* identifier = [[args objectForKey:@"key"] string];
+        float percent = [[args objectForKey:@"percent"] floatValue];
+        GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: identifier];
         
-        achievement.percentComplete = percent;
-        [achievement reportAchievementWithCompletionHandler:^(NSError *error)
+        NSArray *achievementsToComplete = [NSArray
+                                           arrayWithObjects:achievement, nil];
+        [GKAchievement reportAchievements: achievementsToComplete
+                    withCompletionHandler:^(NSError *error)
          {
-             if (error != nil) {
-                 // アチーブメントオブジェクトを保持して、後から再試行します(ここには示さない)
+             if (error != nil)
+             {
+                 NSLog(@"%s%d error %@",__FUNCTION__,__LINE__,error);
              }
          }];
     }
+    else{
+        NSLog(@"not GKLocalPlayer localPlayer].isAuthenticated",__FUNCTION__,__LINE__);
+    }
+
+    
+//    if (achievement) {
+//        
+//        achievement.percentComplete = percent;
+//        [achievement reportAchievementWithCompletionHandler:^(NSError *error)
+//         {
+//             if (error != nil) {
+//                 // アチーブメントオブジェクトを保持して、後から再試行します(ここには示さない)
+//             }
+//         }];
+//    }
 }
 //- (void) reportScore: (int64_t) score_gc forCategory: (NSString*) category
 - (void) reportScore:(id)args
 {
+    NSLog(@"reportScore");
+    NSLog(@"%s%d start",__FUNCTION__,__LINE__);
     ENSURE_UI_THREAD_1_ARG(args);
     ENSURE_SINGLE_ARG(args,NSDictionary);
     NSString* identifier = [args objectForKey:@"id"];
@@ -174,8 +198,12 @@
         [GKScore reportScores:@[score] withCompletionHandler:^(NSError *error) {
             if (error) {
                 // エラーの場合
+                NSLog(@"%s%d error %@",__FUNCTION__,__LINE__,error);
             }
         }];
+    }
+    else{
+        NSLog(@"not GKLocalPlayer localPlayer].isAuthenticated");
     }
     
     //IDがある場合、指定
@@ -218,6 +246,8 @@
 //-(IBAction)showBord
 - (void) showBoard:(id)args
 {
+    NSLog(@"%s%d start",__FUNCTION__,__LINE__);
+
     ENSURE_UI_THREAD(showBoard,args);
     ENSURE_SINGLE_ARG(args,NSDictionary);
     leaderboardController = [[GKLeaderboardViewController alloc] init];
@@ -240,7 +270,8 @@
 //リーダーボードで完了を押した時に呼ばれる
 - (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
 {
-    
+    NSLog(@"%s%d start",__FUNCTION__,__LINE__);
+
     [leaderboardController dismissModalViewControllerAnimated:YES];
 }
 
